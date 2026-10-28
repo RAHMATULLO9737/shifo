@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Admin boshqaruv paneli — ShifoCare{% endblock %}
+{% block content %}
+<h1>Admin boshqaruv paneli</h1>
+<p class="muted">Klinika ma'lumotlari va xodimlar faoliyatini sayt ichidan boshqaring.</p>
+<div class="grid">
+  <div class="card"><h2>Faol shifokorlar</h2><p class="stat">{{ doctor_count }}</p><a class="btn" href="{% url 'doctors' %}">Shifokorlarni boshqarish</a></div>
+  <div class="card"><h2>Bemorlar</h2><p class="stat">{{ patient_count }}</p><a class="btn" href="{% url 'patients' %}">Bemorlarni boshqarish</a></div>
+  <div class="card"><h2>Bugungi qabullar</h2><p class="stat">{{ today_count }}</p><a class="btn" href="{% url 'appointments_list' %}">Qabullarni ko'rish</a></div>
+  <div class="card"><h2>Tasdiq kutayotganlar</h2><p class="stat">{{ pending_count }}</p><a class="btn" href="{% url 'appointments_list' %}">Holatlarni boshqarish</a></div>
+  <div class="card"><h2>Faol xizmatlar</h2><p class="stat">{{ service_count }}</p><a class="btn" href="{% url 'services' %}">Xizmatlarni boshqarish</a></div>
+</div>
+<div class="card"><h2>Yaqindagi qabullar</h2><div class="table-wrap"><table><tr><th>Sana</th><th>Bemor</th><th>Shifokor</th><th>Holati</th></tr>{% for a in recent_appointments %}<tr><td>{{ a.appointment_time|date:"d.m.Y H:i" }}</td><td>{{ a.patient.full_name }}</td><td>{{ a.doctor.full_name }}</td><td>{{ a.get_status_display }}</td></tr>{% empty %}<tr><td colspan="4">Hozircha qabullar yo'q.</td></tr>{% endfor %}</table></div></div>
+<div class="grid"><a class="btn secondary" href="{% url 'reports' %}">Hisobotlar va daromad</a><a class="btn secondary" href="{% url 'doctors' %}">Shifokorlar bo‘limi</a><a class="btn secondary" href="{% url 'patients' %}">Bemorlar bo‘limi</a></div>
+{% endblock %}

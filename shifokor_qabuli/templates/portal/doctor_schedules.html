@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Shifokor ish jadvali — ShifoCare{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:1000px;margin:25px auto;padding:25px;">
+    <h1>Shifokor ish jadvali</h1>
+    <p>Shifokorlarning ish kunlari va qabul vaqtlarini boshqaring.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div style="padding:12px;margin:10px 0;background:#e8f7ed;border-radius:8px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        <div style="color:#b00020;margin-bottom:15px;">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <h2>Yangi jadval qo‘shish</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div style="margin-bottom:15px;">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button class="btn" type="submit">Jadvalni saqlash</button>
+    </form>
+
+    <hr style="margin:30px 0;">
+
+    <h2>Mavjud ish jadvallari</h2>
+
+    <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;padding:10px;">Shifokor</th>
+                    <th style="text-align:left;padding:10px;">Hafta kuni</th>
+                    <th style="text-align:left;padding:10px;">Ish vaqti</th>
+                    <th style="text-align:left;padding:10px;">Qabul oralig‘i</th>
+                    <th style="text-align:left;padding:10px;">Holati</th>
+                    <th style="padding:10px;">Amal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for schedule in schedules %}
+                    <tr style="border-top:1px solid #ddd;">
+                        <td style="padding:10px;">{{ schedule.doctor.full_name }}</td>
+                        <td style="padding:10px;">{{ schedule.get_weekday_display }}</td>
+                        <td style="padding:10px;">
+                            {{ schedule.start_time|time:"H:i" }} –
+                            {{ schedule.end_time|time:"H:i" }}
+                        </td>
+                        <td style="padding:10px;">
+                            {{ schedule.slot_minutes }} daqiqa
+                        </td>
+                        <td style="padding:10px;">
+                            {% if schedule.is_active %}Faol{% else %}Faol emas{% endif %}
+                        </td>
+                        <td style="padding:10px;">
+                            <form method="post"
+                                  action="{% url 'delete_doctor_schedule' schedule.id %}"
+                                  onsubmit="return confirm('Ushbu jadvalni o‘chirmoqchimisiz?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">
+                                    O‘chirish
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding:15px;">
+                            Hozircha ish jadvali mavjud emas.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

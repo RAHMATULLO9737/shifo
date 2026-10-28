@@ -1,0 +1,329 @@
+
+{% extends "base.html" %}
+
+{% block title %}Bemor kabineti — ShifoCare{% endblock %}
+
+{% block content %}
+<style>
+    .register-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+        background: linear-gradient(135deg, #edf8ff 0%, #f5f7ff 55%, #e9f8f5 100%);
+        font-family: Arial, sans-serif;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 500px;
+        background: #fff;
+        padding: 38px;
+        border-radius: 24px;
+        box-shadow: 0 15px 45px rgba(29, 78, 115, 0.12);
+        border: 1px solid rgba(226, 238, 248, 0.9);
+    }
+
+    .register-logo {
+        width: 66px;
+        height: 66px;
+        margin: 0 auto 18px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+        background: linear-gradient(135deg, #0ea5e9, #0d9488);
+        box-shadow: 0 8px 18px rgba(14, 165, 233, 0.25);
+    }
+
+    .register-heading {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .register-heading h1 {
+        color: #16324f;
+        font-size: 27px;
+        margin: 0 0 10px;
+        font-weight: 750;
+    }
+
+    .register-heading p {
+        color: #718096;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .register-field {
+        margin-bottom: 20px;
+    }
+
+    .register-field label {
+        display: block;
+        color: #334155;
+        font-size: 14px;
+        font-weight: 650;
+        margin-bottom: 8px;
+    }
+
+    .register-field input,
+    .register-field select,
+    .register-field textarea {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #dbe5ef;
+        border-radius: 11px;
+        outline: none;
+        font-size: 14px;
+        color: #1e293b;
+        background: #f9fbfd;
+        transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    .register-field input:focus,
+    .register-field select:focus,
+    .register-field textarea:focus {
+        border-color: #0ea5e9;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12);
+    }
+
+    .password-wrapper {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .password-wrapper input {
+        flex: 1;
+        width: 0;
+    }
+
+    .password-toggle {
+        flex-shrink: 0;
+        min-width: 48px;
+        border: 1px solid #dbe5ef;
+        border-radius: 11px;
+        background: #f1f8fc;
+        cursor: pointer;
+        font-size: 19px;
+        transition: background .2s;
+    }
+
+    .password-toggle:hover {
+        background: #e0f2fe;
+    }
+
+    .register-help {
+        display: block;
+        color: #8492a6;
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 7px;
+    }
+
+    .register-help ul {
+        padding-left: 18px;
+        margin: 5px 0;
+    }
+
+    .register-error {
+        padding: 14px 16px;
+        margin-bottom: 22px;
+        background: #fff1f2;
+        border: 1px solid #fecdd3;
+        color: #be123c;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .register-error ul {
+        padding-left: 20px;
+        margin: 8px 0 0;
+    }
+
+    .field-error {
+        color: #dc2626;
+        font-size: 12px;
+        margin: 7px 0 0;
+    }
+
+    .register-submit {
+        width: 100%;
+        border: none;
+        padding: 15px;
+        margin-top: 8px;
+        border-radius: 12px;
+        color: white;
+        background: linear-gradient(135deg, #0284c7, #0d9488);
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(2, 132, 199, 0.2);
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .register-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(2, 132, 199, 0.28);
+    }
+
+    .register-footer {
+        text-align: center;
+        color: #718096;
+        font-size: 14px;
+        margin: 24px 0 0;
+    }
+
+    .register-footer a {
+        color: #0284c7;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .register-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .register-security {
+        text-align: center;
+        margin-top: 22px;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    @media (max-width: 520px) {
+        .register-page {
+            padding: 22px 12px;
+        }
+
+        .register-card {
+            padding: 25px 20px;
+            border-radius: 18px;
+        }
+
+        .register-heading h1 {
+            font-size: 23px;
+        }
+    }
+</style>
+
+<div class="register-page">
+    <div class="register-card">
+
+        <div class="register-logo">🏥</div>
+
+        <div class="register-heading">
+            <h1>Bemor kabinetini yaratish</h1>
+            <p>
+                ShifoCare tizimiga xush kelibsiz!<br>
+                Kabinet yaratish uchun ma’lumotlaringizni kiriting.
+            </p>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="register-error">
+                <strong>Ro‘yxatdan o‘tishda xatolik!</strong>
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% if form.errors %}
+            <div class="register-error">
+                <strong>Ma’lumotlarni tekshiring</strong>
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="register-field">
+
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span style="color:#ef4444;">*</span>
+                        {% endif %}
+                    </label>
+
+                    {% if field.name == "password1" or field.name == "password2" %}
+                        <div class="password-wrapper">
+                            {{ field }}
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                onclick="togglePassword('{{ field.id_for_label }}', this)"
+                                aria-label="Parolni ko‘rsatish yoki yashirish"
+                                aria-pressed="false"
+                                title="Parolni ko‘rsatish">
+                                👁
+                            </button>
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+
+                    {% if field.help_text %}
+                        <div class="register-help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <p class="field-error">{{ error }}</p>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+
+            <button class="register-submit" type="submit">
+                Kabinet yaratish &nbsp; →
+            </button>
+        </form>
+
+        <p class="register-footer">
+            Hisobingiz bormi?
+            <a href="{% url 'login' %}">Tizimga kirish</a>
+        </p>
+
+        <div class="register-security">
+            🔒 Ma’lumotlaringiz xavfsizligi muhim.
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    const isHidden = input.type === "password";
+
+    input.type = isHidden ? "text" : "password";
+    button.textContent = isHidden ? "🙈" : "👁";
+    button.setAttribute("aria-pressed", String(isHidden));
+    button.title = isHidden ? "Parolni yashirish" : "Parolni ko‘rsatish";
+}
+</script>
+{% endblock %}
+

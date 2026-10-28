@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Bosh sahifa | ShifoCare{% endblock %}{% block content %}
+<h1>ShifoCare klinikasi</h1><p class="muted">Shifokorlarni ko‘ring, xizmatlar bilan tanishing va qabulga yoziling.</p>
+<div class="grid">
+<div class="card"><div class="muted">Faol shifokorlar</div><div class="stat">{{ doctor_count }}</div><a href="{% url 'doctors' %}">Shifokorlarni ko‘rish →</a></div>
+
+
+
+<div class="card"><div class="muted">Faol xizmatlar</div><div class="stat">{{ service_count }}</div><a href="{% url 'services' %}">Xizmatlar →</a></div>
+</div>
+{% if user.is_authenticated and user.is_staff %}<div class="card"><h2>Yaqinlashayotgan qabullar</h2>{% if upcoming %}<div class="table-wrap"><table><thead><tr><th>Sana-vaqt</th><th>Bemor</th><th>Shifokor</th><th>Xizmat</th><th>Holat</th></tr></thead><tbody>{% for a in upcoming %}<tr><td>{{ a.appointment_time|date:"d.m.Y H:i" }}</td><td>{{ a.patient.full_name }}<br><span class="muted">{{ a.patient.phone }}</span></td><td>{{ a.doctor.full_name }}<br><span class="muted">{{ a.doctor.specialty_name }}</span></td><td>{{ a.service|default:"—" }}</td><td><span class="badge {{ a.status }}">{{ a.get_status_display }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="muted">Hozircha kelgusi qabul belgilanmagan.</p>{% endif %}</div>{% endif %}
+<div class="grid">
+  <a class="btn" href="{% url 'book_appointment' %}">＋ Qabulga yozilish</a>
+  {% if user.is_authenticated %}
+    {% if user.is_superuser or user.is_staff %}<a class="btn secondary" href="{% url 'admin_panel' %}">Admin panelini ochish</a>{% endif %}
+    {% if user.doctor_profile %}<a class="btn secondary" href="{% url 'doctor_panel' %}">Shifokor panelini ochish</a>{% endif %}
+    {% if user.patient_profile %}<a class="btn light" href="{% url 'patient_panel' %}">Bemor panelini ochish</a>{% endif %}
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Tizimga kirish — ShifoCare{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:550px;margin:auto">
+    <h1>Tizimga kirish</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div style="margin-bottom:18px">
+            <label for="{{ form.username.id_for_label }}">
+                Foydalanuvchi nomi
+            </label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div style="margin-bottom:18px">
+            <label for="{{ form.password.id_for_label }}">Parol</label>
+
+            <div class="password-box">
+                {{ form.password }}
+
+                <button
+                    type="button"
+                    id="togglePassword"
+                    class="password-eye"
+                    aria-label="Parolni ko‘rsatish"
+                    aria-pressed="false"
+                >👁</button>
+            </div>
+
+            {{ form.password.errors }}
+        </div>
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <button class="btn" type="submit">Kirish</button>
+    </form>
+
+    <p>
+        Yangi bemormisiz?
+        <a href="{% url 'register_patient' %}">Ro‘yxatdan o‘tish</a>
+    </p>
+</div>
+
+<style>
+.password-box {
+    position: relative;
+    width: 100%;
+}
+
+.password-box input[type="password"],
+.password-box input[type="text"] {
+    display: block;
+    width: 100%;
+    min-height: 45px;
+    padding: 12px 48px 12px 14px;
+    box-sizing: border-box;
+}
+
+.password-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 19px;
+}
+</style>
+
+<script>
+(function () {
+    const password = document.getElementById("id_password");
+    const button = document.getElementById("togglePassword");
+
+    if (!password || !button) {
+        console.error("Parol maydoni yoki ko‘rsatish tugmasi topilmadi.");
+        return;
+    }
+
+    button.addEventListener("click", function () {
+        const showPassword = password.type === "password";
+
+        password.type = showPassword ? "text" : "password";
+        button.textContent = showPassword ? "✏️" : "👍";
+        button.setAttribute("aria-pressed", String(showPassword));
+        button.setAttribute(
+            "aria-label",
+            showPassword ? "Parolni yashirish" : "Parolni ko‘rsatish"
+        );
+    });
+})();
+</script>
+{% endblock %}
+```

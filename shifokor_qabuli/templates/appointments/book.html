@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block title %}Qabul belgilash | ShifoCare<script>
+(function(){
+ const doctor=document.getElementById('id_doctor'), date=document.getElementById('slot-date'), slots=document.getElementById('slot-choice'), msg=document.getElementById('slot-message'), datetime=document.getElementById('id_appointment_time');
+ async function loadSlots(){
+  slots.innerHTML='<option value="">Yuklanmoqda...</option>';
+  if(!doctor.value||!date.value){slots.innerHTML='<option value="">Shifokor va sanani tanlang</option>';return;}
+  try { const r=await fetch('{% url "available_slots" %}?doctor='+encodeURIComponent(doctor.value)+'&date='+encodeURIComponent(date.value)); const data=await r.json(); slots.innerHTML='';
+   if(!data.slots||!data.slots.length){slots.innerHTML='<option value="">Bo'sh vaqt topilmadi</option>';msg.textContent='Bu sana uchun ish jadvali yo'q yoki barcha vaqtlar band.';return;}
+   slots.add(new Option('Vaqtni tanlang','')); data.slots.forEach(t=>slots.add(new Option(t,t))); msg.textContent='Bo'sh vaqtni tanlasangiz, qabul sanasi-vaqti maydoni avtomatik to'ldiriladi.';
+  } catch(e){slots.innerHTML='<option value="">Vaqtlarni yuklab bo'lmadi</option>';}
+ }
+ if(doctor&&date&&slots){doctor.addEventListener('change',loadSlots);date.addEventListener('change',loadSlots);slots.addEventListener('change',()=>{if(slots.value&&date.value&&datetime){datetime.value=date.value+'T'+slots.value;}});}
+})();
+</script>{% endblock %}{% block content %}
+<div class="card" style="max-width:760px;margin:auto"><h1>Qabul vaqtini belgilash</h1><p class="muted">Shifokor, bemor, xizmat va qulay sana-vaqtni tanlang. Bir shifokorga bir vaqtda ikki qabul belgilanishi tekshiriladi.</p><div class="card" style="background:#f8fbfc"><h2>Bo'sh vaqtni avtomatik tanlash</h2><div class="grid"><div><label for="slot-date">Sana</label><input id="slot-date" type="date" min="{% now 'Y-m-d' %}"></div><div><label for="slot-choice">Bo'sh vaqtlar</label><select id="slot-choice"><option value="">Avval shifokor va sanani tanlang</option></select></div></div><small id="slot-message" class="muted">Ish jadvali admin panelda sozlangan bo'lishi kerak.</small></div><form method="post">{% csrf_token %}{% if form.non_field_errors %}<div class="error">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}{% endfor %}<br><br><button class="btn" type="submit">Qabulni saqlash</button></form><p class="muted">Bemor ro'yxatda bo'lmasa, avval <a href="{% url 'patients' %}">Bemorlar</a> sahifasida qo'shing. Qabulni tasdiqlash yoki yakunlash admin panelda amalga oshiriladi.</p></div>
+<script>
+(function(){
+ const doctor=document.getElementById('id_doctor'), date=document.getElementById('slot-date'), slots=document.getElementById('slot-choice'), msg=document.getElementById('slot-message'), datetime=document.getElementById('id_appointment_time');
+ async function loadSlots(){
+  slots.innerHTML='<option value="">Yuklanmoqda...</option>';
+  if(!doctor.value||!date.value){slots.innerHTML='<option value="">Shifokor va sanani tanlang</option>';return;}
+  try { const r=await fetch('{% url "available_slots" %}?doctor='+encodeURIComponent(doctor.value)+'&date='+encodeURIComponent(date.value)); const data=await r.json(); slots.innerHTML='';
+   if(!data.slots||!data.slots.length){slots.innerHTML='<option value="">Bo'sh vaqt topilmadi</option>';msg.textContent='Bu sana uchun ish jadvali yo'q yoki barcha vaqtlar band.';return;}
+   slots.add(new Option('Vaqtni tanlang','')); data.slots.forEach(t=>slots.add(new Option(t,t))); msg.textContent='Bo'sh vaqtni tanlasangiz, qabul sanasi-vaqti maydoni avtomatik to'ldiriladi.';
+  } catch(e){slots.innerHTML='<option value="">Vaqtlarni yuklab bo'lmadi</option>';}
+ }
+ if(doctor&&date&&slots){doctor.addEventListener('change',loadSlots);date.addEventListener('change',loadSlots);slots.addEventListener('change',()=>{if(slots.value&&date.value&&datetime){datetime.value=date.value+'T'+slots.value;}});}
+})();
+</script>{% endblock %}

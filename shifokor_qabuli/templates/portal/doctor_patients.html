@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Bemorlar ro'yxati — ShifoCare{% endblock %}
+{% block content %}
+<h1>{% if doctor %}Mening bemorlarim{% else %}Bemorlar ro'yxati{% endif %}</h1>
+<p class="muted">{% if doctor %}Bu ro'yxatda siz qabul qilgan bemorlar ko'rsatiladi.{% else %}Ruxsatingiz doirasidagi bemorlar ro'yxati.{% endif %}</p>
+<div class="card">
+  <form method="get" class="filters"><div><label for="q">Bemorni qidirish</label><input id="q" name="q" value="{{ query }}" placeholder="F.I.Sh., telefon yoki email"></div><div></div><button class="btn" type="submit">Qidirish</button></form>
+  <div class="table-wrap"><table><thead><tr><th>Bemor</th><th>Telefon</th><th>Email</th><th>Qabullar soni</th><th>Amal</th></tr></thead><tbody>
+  {% for patient in patients %}<tr><td>{{ patient.full_name }}</td><td>{{ patient.phone }}</td><td>{{ patient.email|default:"—" }}</td><td>{% if doctor %}{{ patient.appointments.all|length }}{% else %}{{ patient.appointments.all|length }}{% endif %}</td><td><a class="btn light" href="{% url 'doctor_patient_detail' patient.id %}">Ko'rish</a></td></tr>{% empty %}<tr><td colspan="5">Bemor topilmadi.</td></tr>{% endfor %}
+  </tbody></table></div>
+</div>
+<a class="btn secondary" href="{% url 'portal' %}">Kabinetga qaytish</a>
+{% endblock %}

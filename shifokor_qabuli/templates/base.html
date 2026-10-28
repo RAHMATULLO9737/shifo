@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}ShifoCare | Zamonaviy klinika{% endblock %}</title>
+
+    <style>
+        :root {
+            --primary: #12304a;
+            --primary-light: #1d4968;
+            --teal: #0d9488;
+            --teal-light: #14b8a6;
+            --background: #f4f8fb;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #dc2626;
+            --shadow: 0 12px 35px rgba(18, 48, 74, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(20, 184, 166, 0.06),
+                    transparent 30%
+                ),
+                var(--background);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            transition: all 0.25s ease;
+        }
+
+        /* HEADER */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(18, 48, 74, 0.97);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 5px 25px rgba(15, 35, 55, 0.12);
+        }
+
+        .header-inner {
+            width: min(1400px, 100%);
+            margin: auto;
+            padding: 0 5%;
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 850;
+            letter-spacing: -0.8px;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 39px;
+            height: 39px;
+            border-radius: 13px;
+            color: white;
+            font-size: 23px;
+            background: linear-gradient(
+                135deg,
+                var(--teal-light),
+                #0f766e
+            );
+            box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
+        }
+
+        .brand span:last-child {
+            color: #5eead4;
+        }
+
+        /* NAVIGATION */
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .main-nav > a {
+            padding: 10px 12px;
+            border-radius: 9px;
+            color: #e2edf5;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .main-nav > a:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .main-nav > a.active {
+            color: #ffffff;
+            background: rgba(20, 184, 166, 0.18);
+        }
+
+        .main-nav > a.nav-cta {
+            margin-left: 5px;
+            padding: 10px 16px;
+            background: var(--teal);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .main-nav > a.nav-cta:hover {
+            background: var(--teal-light);
+            transform: translateY(-1px);
+        }
+
+        .nav-logout {
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 10px 12px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #e2edf5;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* MAIN CONTENT */
+
+        .container {
+            width: min(1200px, 100%);
+            margin: 36px auto;
+            padding: 0 24px;
+            flex: 1;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: clamp(27px, 4vw, 36px);
+            letter-spacing: -0.8px;
+        }
+
+        h2 {
+            font-size: 23px;
+        }
+
+        p {
+            overflow-wrap: anywhere;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        /* CARDS */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(min(100%, 230px), 1fr)
+            );
+            gap: 22px;
+        }
+
+        .card {
+            margin-bottom: 22px;
+            padding: 26px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 20px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(18, 48, 74, 0.1);
+        }
+
+        .stat {
+            margin: 10px 0;
+            color: var(--teal);
+            font-size: 36px;
+            font-weight: 850;
+            letter-spacing: -1px;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 11px 18px;
+            border: 1px solid transparent;
+            border-radius: 11px;
+            background: linear-gradient(
+                135deg,
+                var(--teal),
+                #0f766e
+            );
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(13, 148, 136, 0.2);
+        }
+
+        .btn.secondary {
+            background: var(--primary);
+        }
+
+        .btn.secondary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn.light {
+            background: #e6f7f4;
+            color: #08766e;
+        }
+
+        .btn.danger {
+            background: var(--danger);
+        }
+
+        /* FORMS */
+
+        form {
+            max-width: 100%;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea,
+        .form-control {
+            width: 100%;
+            min-height: 45px;
+            padding: 12px 14px;
+            border: 1px solid #d8e2ec;
+            border-radius: 11px;
+            outline: none;
+            background: #ffffff;
+            color: var(--text);
+            font: inherit;
+            font-size: 14px;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        .form-control:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: auto;
+            min-height: auto;
+        }
+
+        input[type="file"] {
+            padding: 9px;
+        }
+
+        /* TABLES */
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f0f7fa;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        /* STATUS BADGES */
+
+        .badge {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 30px;
+            background: #edf2f7;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge.pending {
+            background: #fff4cc;
+            color: #92400e;
+        }
+
+        .badge.scheduled {
+            background: #d9f7eb;
+            color: #087443;
+        }
+
+        .badge.completed {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge.cancelled {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* NOTIFICATIONS */
+
+        .message {
+            margin-bottom: 18px;
+            padding: 15px 18px;
+            border: 1px solid #b7ead7;
+            border-radius: 12px;
+            background: #e8fbf2;
+            color: #166534;
+            font-size: 14px;
+        }
+
+        .error,
+        .errorlist {
+            color: #b91c1c;
+        }
+
+        .errorlist {
+            margin: 5px 0;
+            padding-left: 20px;
+            font-size: 13px;
+        }
+
+        /* FILTERS AND PAGINATION */
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            align-items: end;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        /* FOOTER */
+
+        .site-footer {
+            margin-top: auto;
+            padding: 28px 20px;
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer-brand {
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1050px) {
+            .header-inner {
+                padding: 15px 4%;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .main-nav {
+                justify-content: flex-start;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .header-inner {
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 23px;
+            }
+
+            .main-nav {
+                gap: 4px;
+            }
+
+            .main-nav > a,
+            .logout-button {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .main-nav > a.nav-cta {
+                margin-left: 0;
+            }
+
+            .container {
+                margin: 24px auto;
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            th,
+            td {
+                padding: 11px;
+                font-size: 13px;
+            }
+
+            .site-footer {
+                padding: 23px 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+
+        <a href="{% url 'home' %}" class="brand">
+            <span class="brand-icon">✚</span>
+            <span>Shifo<span>Care</span></span>
+        </a>
+
+        <nav class="main-nav" aria-label="Asosiy navigatsiya">
+
+            <a href="{% url 'home' %}">Bosh sahifa</a>
+            <a href="{% url 'doctors' %}">Shifokorlar</a>
+            <a href="{% url 'services' %}">Xizmatlar</a>
+            <!-- <a href="{% url 'book_appointment' %}" class="nav-cta">
+                Qabulga yozilish
+            </a> -->
+
+            {% if user.is_authenticated %}
+
+                {% if user.is_superuser or user.is_staff %}
+                    <a href="{% url 'admin_panel' %}">Admin paneli</a>
+                {% endif %}
+
+                {% if user.doctor_profile %}
+                    <a href="{% url 'doctor_panel' %}">Shifokor paneli</a>
+                {% endif %}
+
+                {% if user.patient_profile %}
+                    <a href="{% url 'patient_panel' %}">Bemor paneli</a>
+                {% endif %}
+
+                {% if user.clinic_profile and user.clinic_profile.role == 'manager' %}
+                    <a href="{% url 'reports' %}">Hisobotlar</a>
+                {% endif %}
+
+                <a href="{% url 'portal' %}">Shaxsiy kabinet</a>
+
+                <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="nav-logout"
+                >
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">
+                        Chiqish
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}">Kirish</a>
+
+                <a href="{% url 'register_patient' %}">
+                    Ro‘yxatdan o‘tish
+                </a>
+
+            {% endif %}
+
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message" role="status">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+</main>
+
+<footer class="site-footer">
+    <div class="footer-brand">✚ ShifoCare</div>
+    <div>
+        Klinika boshqaruvi va qabul vaqtlarini rejalashtirish tizimi
+    </div>
+    <div style="margin-top: 8px;">
+        © {% now "Y" %} ShifoCare. Barcha huquqlar himoyalangan.
+    </div>
+</footer>
+
+</body>
+</html>
+

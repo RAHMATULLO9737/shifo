@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.full_name }} — ShifoCare{% endblock %}
+{% block content %}
+<h1>Bemor ma'lumotlari</h1>
+<div class="card"><h2>{{ patient.full_name }}</h2><div class="grid"><div><b>Telefon</b><p>{{ patient.phone }}</p></div><div><b>Email</b><p>{{ patient.email|default:"—" }}</p></div><div><b>Tug'ilgan sana</b><p>{{ patient.birth_date|date:"d.m.Y"|default:"—" }}</p></div><div><b>Jinsi</b><p>{{ patient.get_gender_display|default:"—" }}</p></div></div><p><b>Manzil:</b> {{ patient.address|default:"—" }}</p></div>
+<div class="card"><h2>Qabul tarixi</h2><div class="table-wrap"><table><thead><tr><th>Sana</th><th>Shifokor</th><th>Xizmat</th><th>Holat</th><th>Sabab</th></tr></thead><tbody>{% for a in appointments %}<tr><td>{{ a.appointment_time|date:"d.m.Y H:i" }}</td><td>{{ a.doctor.full_name }}</td><td>{{ a.service|default:"Konsultatsiya" }}</td><td>{{ a.get_status_display }}</td><td>{{ a.reason|default:"—" }}</td></tr>{% empty %}<tr><td colspan="5">Qabul tarixi yo'q.</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="card"><h2>Tibbiy qaydlar va tashxislar</h2>{% for item in records %}<p><b>{{ item.recorded_at|date:"d.m.Y H:i" }} — {{ item.diagnosis }}</b><br>{{ item.notes|default:"Qo'shimcha qayd yo'q." }}</p>{% empty %}<p class="muted">Tibbiy qaydlar mavjud emas.</p>{% endfor %}<a class="btn light" href="{% url 'add_medical_record' %}">Tashxis/qayd qo'shish</a></div>
+<div class="card"><h2>Tahlil natijalari</h2>{% for item in labs %}<p><b>{{ item.result_date|date:"d.m.Y" }} · {{ item.test_name }}</b><br>{{ item.result }}{% if item.reference_range %}<br>Me'yor: {{ item.reference_range }}{% endif %}{% if item.attachment %}<br><a href="{% url 'download_lab_attachment' item.id %}">Faylni yuklab olish</a>{% endif %}</p>{% empty %}<p class="muted">Tahlil natijalari mavjud emas.</p>{% endfor %}</div>
+<div class="card"><h2>Retseptlar</h2>{% for item in prescriptions %}<p><b>{{ item.issued_at|date:"d.m.Y" }} · {{ item.medication }}</b><br>Doza: {{ item.dosage }}<br>{{ item.instructions }}</p>{% empty %}<p class="muted">Retseptlar mavjud emas.</p>{% endfor %}<a class="btn light" href="{% url 'add_prescription' %}">Retsept yozish</a></div>
+<p><a class="btn secondary" href="{% url 'doctor_patients' %}">Bemorlar ro'yxatiga qaytish</a></p>
+{% endblock %}
