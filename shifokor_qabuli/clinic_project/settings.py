@@ -2,12 +2,22 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-this-secret-key-before-deployment")
-DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
+BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "dev-only-change-this-secret-key-before-deployment"
+)
+
+DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
+
 ALLOWED_HOSTS = [
-"shifo.onrender.com",
-"127.0.0.1",
-"localhost",
+    "shifo.onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://shifo.onrender.com",
 ]
 
 
